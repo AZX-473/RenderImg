@@ -1,6 +1,6 @@
-      var apiUrl = './API/img/';
-      var isnullurl=true
-      var imgs = [
+var apiUrl = './API/img/';
+var isnullurl=true
+var imgs = [
         "008ybfh5gy1hrcyxvw09qj32b32azkjm.jpg",
 "008ybfh5gy1hww1v400gyj30rs0rsdph.jpg",
 "124177.jpg",
@@ -41,10 +41,13 @@
 "ブルアカ2nd記念情報.jpg",
 "宫子3840x2160.png",
 "微信图片_20251228100930_350_97.png"
-      ]
-      function fetchImage() {
-          const randomIndex = Math.floor(Math.random() * imgs.length);
-          const randomFile = apiUrl+imgs[randomIndex];
-          const imageContainer = document.getElementById('image-container');
-          imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" />`;
-      }
+]
+function fetchImage() {
+  const randomIndex = Math.floor(Math.random() * imgs.length);
+  const randomFile = apiUrl+imgs[randomIndex];
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" />`;
+}
+function AllImg(){
+location.href = "./API/img/";
+}
