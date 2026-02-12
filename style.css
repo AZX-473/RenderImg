@@ -1,0 +1,22 @@
+html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* 隐藏整个页面的滚动条 */
+        height: 100%; /* 确保 body 和 html 的高度为 100% */
+      }
+
+      #image-container {
+        width: 100vw; /* 容器宽度为视口宽度 */
+        height: 100vh; /* 容器高度为视口高度 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* 隐藏溢出部分 */
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; /* 保持图片原比例，填充容器 */
+      }

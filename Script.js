@@ -1,0 +1,31 @@
+      var apiUrl = './API/img/';
+      var isnullurl=true
+      var imgs = [
+        "008ybfh5gy1hrcyxvw09qj32b32azkjm.jpg",
+"008ybfh5gy1hww1v400gyj30rs0rsdph.jpg",
+"2020_Christmas.jpg",
+"281910ee2cdf36c2840be627e7c3cd623493282386545566_waifu2x_2x_3n_png.png",
+"2a17e729b93853496df310fa13efebf53493282386545566.png",
+"5396370120876b8a9745ce3929788fa73493282386545566.png",
+"634115958.png",
+"634115963.png",
+"7e3e6709c93d70cf3bc7f7fdc68bc600baa1cc11fdbe.webp",
+"8e0fe2f13880f201de95b3e76ac86c353494352093448281.jpg",
+"CH0335_home_Idle_01_4.965739999999986.png",
+"GgszvixbYAAqsFx.jpg",
+"Midori_home_Dummy_0.033006581481720865.png",
+"Momoi_home_Dummy_0.032633157747970376.png",
+"Snipaste_2025-12-23_12-58-10.png",
+"Snipaste_2026-02-05_13-22-44.png",
+"Snipaste_2026-02-05_13-36-12.png",
+"ブルアカ2nd記念情報.jpg",
+"协和逐日.jpeg",
+"宫子3840x2160.png",
+"微信图片_20251228100930_350_97.png"
+      ]
+      function fetchImage() {
+          const randomIndex = Math.floor(Math.random() * imgs.length);
+          const randomFile = apiUrl+imgs[randomIndex];
+          const imageContainer = document.getElementById('image-container');
+          imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" />`;
+      }
