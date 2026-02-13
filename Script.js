@@ -82,13 +82,13 @@ function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" />`;
+  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
 }
 function fetchImageFromUrl(){
   const randomIndex = Math.floor(Math.random() * urls.length);
   const randomFile = urls[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" />`;
+  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
 }
 function AllImg(){
 location.href = "./API/img/";
