@@ -6,16 +6,22 @@ function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
+  imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
 }
 function fetchImageFromUrl(){
   const randomIndex = Math.floor(Math.random() * urls.length);
   const randomFile = urls[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
+  imageContainer.innerHTML = `<h2>File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${urls.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
+}
+function HrefImg(){
+  const tmp = document.getElementById('HrefImgName');
+  const randomFile = apiUrl+tmp.value;
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<h2>Image_Name:${tmp.value},<h2>File_Url:${randomFile}</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
 }
 function AllImg(){
-location.href = "./API/img/";
+  location.href = "./API/img/";
 }
 async function loadJsonUrl(url) {
   try {
