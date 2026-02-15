@@ -57,3 +57,16 @@ async function loadJsonName(url) {
 }
 loadJsonUrl("./API/file.json")
 loadJsonName("./API/file.json")
+if (typeof(Storage) !== "undefined") {
+  if (localStorage.pageVisitCount) {
+    localStorage.pageVisitCount = Number(localStorage.pageVisitCount) + 1;
+  } else {
+    localStorage.pageVisitCount = 1;
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("visitCount").innerText ="This page has been visited " + localStorage.pageVisitCount + " times.";});
+} else {
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("visitCount").innerText ="Your browser does not support LocalStorage.";
+  });
+}
