@@ -4,20 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Render Image</title>
-    <style src="style.css"></style>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="Script.js"></script>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
   </head>
 
-  <body>
-    <div id="image-container">
-        <h1>我要叠甲!</h1>
-        <h1>里面是我自己找的图片,内容不可 不可 不可 不可保证!</h1>
-        <button onclick="fetchImageFromName()">线路一:不稳定,加载慢,兼容性好</button>
-        <button onclick="fetchImageFromUrl()">线路二:稳定,加载快,兼容性差</button>
-    </div>
-    <div>
-      <input type="text" id='HrefImgName'>输入图片名,直接跳转</input>
-      <button onclick="HrefImg()">Okay</button>
+  <body background="https://img.cdn1.vip/i/699167e1bb1f0_1771136993.webp" style="background-size: cover">
+    <div style="justify-content:center;display: flex;">
+      <div id="image-container">
+          <h1>我要叠甲!</h1>
+          <h1>里面是我自己找的图片,内容不可 不可 不可 不可保证!</h1>
+          <button onclick="fetchImageFromName()">线路一:不稳定,加载慢,兼容性好</button>
+          <button onclick="fetchImageFromUrl()">线路二:稳定,加载快,兼容性差</button>
+          <div>
+            <input type="text" id='HrefImgName'>输入图片名,直接跳转</input>
+            <button onclick="HrefImg()">Okay</button>
+          </div>
+      </div>
     </div>
   </body>
 </html>
