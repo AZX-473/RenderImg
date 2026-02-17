@@ -76,39 +76,28 @@ if (typeof(Storage) !== "undefined") {
 function submitFeedback() {
     const feedbackTextarea = document.getElementById('Feedback');
     const feedbackMessageDiv = document.getElementById('feedbackMessage');
-    const feedback = feedbackTextarea.value.trim(); // 获取并去除首尾空格
+    const feedback = feedbackTextarea.value.trim();
 
     if (feedback === "") {
         feedbackMessageDiv.textContent = "反馈内容不能为空！";
         feedbackMessageDiv.style.color = "red";
-        return; // 如果为空，则不执行后续操作
+        return; 
     }
-
-    // --- 这里是“存储”到 localStorage 的操作 ---
     try {
-        // 1. 从 localStorage 获取已有的反馈列表（如果存在）
         let storedFeedback = localStorage.getItem('userFeedback');
         let feedbackArray = [];
 
         if (storedFeedback) {
-            feedbackArray = JSON.parse(storedFeedback); // 将JSON字符串解析回数组
+            feedbackArray = JSON.parse(storedFeedback);
         }
-
-        // 2. 将新的反馈添加到数组中
-        // 可以选择存储一个对象，包含时间戳等信息
         feedbackArray.push({
             text: feedback,
-            timestamp: new Date().toLocaleString() // 添加提交的时间
+            timestamp: new Date().toLocaleString()
         });
-
-        // 3. 将更新后的数组重新存储到 localStorage
-        // JSON.stringify() 将JavaScript对象或数组转换为JSON字符串
         localStorage.setItem('userFeedback', JSON.stringify(feedbackArray));
-
-        // --- 操作完成后的反馈 ---
         feedbackMessageDiv.textContent = "感谢您的反馈！已为您保存。";
         feedbackMessageDiv.style.color = "green";
-        feedbackTextarea.value = ""; // 清空输入框
+        feedbackTextarea.value = ""; 
 
     } catch (error) {
         console.error("存储反馈时发生错误:", error);
@@ -116,57 +105,42 @@ function submitFeedback() {
         feedbackMessageDiv.style.color = "red";
     }
 }
-
-// --- （可选）加载已有反馈 ---
-// 你也可以在这里添加一个功能，读取并显示 localStorage 中的反馈
-// 例如，当页面加载时，显示所有存储过的反馈
-window.onload = function() {
+function getuserFeedback() {
     let storedFeedback = localStorage.getItem('userFeedback');
     if (storedFeedback) {
         let feedbackArray = JSON.parse(storedFeedback);
-        console.log("已存储的反馈:", feedbackArray); // 在浏览器控制台查看
-        // 如果你想在页面上直接显示（例如，在一个列表中），你需要构建相应的HTML
-        // 但通常，仅靠 JS/HTML 的反馈提交功能，不太会直接在页面上列出所有历史反馈。
+        console.log("已存储的反馈:", feedbackArray); 
+    }else{
+      console.log("获取反馈失败"); 
     }
 };
-
+getuserFeedback()
 
 function submitFeedbackimg() {
     const feedbackTextarea = document.getElementById('Feedbackimg');
     const feedbackMessageDiv = document.getElementById('feedbackMessageimg');
-    const feedback = feedbackTextarea.value.trim(); // 获取并去除首尾空格
+    const feedback = feedbackTextarea.value.trim();
 
     if (feedback === "") {
         feedbackMessageDiv.textContent = "图片链接不能为空！";
         feedbackMessageDiv.style.color = "red";
-        return; // 如果为空，则不执行后续操作
+        return; 
     }
-
-    // --- 这里是“存储”到 localStorage 的操作 ---
     try {
-        // 1. 从 localStorage 获取已有的反馈列表（如果存在）
         let storedFeedback = localStorage.getItem('userFeedbackimg');
         let feedbackArray = [];
 
         if (storedFeedback) {
-            feedbackArray = JSON.parse(storedFeedback); // 将JSON字符串解析回数组
+            feedbackArray = JSON.parse(storedFeedback); 
         }
-
-        // 2. 将新的反馈添加到数组中
-        // 可以选择存储一个对象，包含时间戳等信息
         feedbackArray.push({
             text: feedback,
-            timestamp: new Date().toLocaleString() // 添加提交的时间
+            timestamp: new Date().toLocaleString()
         });
-
-        // 3. 将更新后的数组重新存储到 localStorage
-        // JSON.stringify() 将JavaScript对象或数组转换为JSON字符串
         localStorage.setItem('userFeedbackimg', JSON.stringify(feedbackArray));
-
-        // --- 操作完成后的反馈 ---
         feedbackMessageDiv.textContent = "感谢您的提交！已为您保存。";
         feedbackMessageDiv.style.color = "green";
-        feedbackTextarea.value = ""; // 清空输入框
+        feedbackTextarea.value = ""; 
 
     } catch (error) {
         console.error("发生错误:", error);
@@ -175,10 +149,7 @@ function submitFeedbackimg() {
     }
 }
 
-// --- （可选）加载已有反馈 ---
-// 你也可以在这里添加一个功能，读取并显示 localStorage 中的反馈
-// 例如，当页面加载时，显示所有存储过的反馈
-window.onload = function() {
+function getuserFeedbackimg() {
     let storedFeedback = localStorage.getItem('userFeedbackimg');
     if (storedFeedback) {
         let feedbackArray = JSON.parse(storedFeedback);
@@ -188,7 +159,7 @@ window.onload = function() {
         }
     }
 };
-
+getuserFeedbackimg()
 function fetchuserFeedimg(){
   const randomIndex = Math.floor(Math.random() * usreimgs.length);
   const randomFile = usreimgs[randomIndex];
