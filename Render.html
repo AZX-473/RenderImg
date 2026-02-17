@@ -16,10 +16,14 @@
           <h1>里面是我自己找的图片,内容不可 不可 不可 不可保证!</h1>
           <button onclick="fetchImageFromName()">线路一:不稳定,加载慢,兼容性好</button>
           <button onclick="fetchImageFromUrl()">线路二:稳定,加载快,兼容性差</button>
-          <div>
+          <div style="height: 600px;">
             <input type="text" id='HrefImgName'>输入图片名,直接跳转</input>
             <button onclick="HrefImg()">Okay</button>
           </div>
+          <div>提交反馈</div>
+          <input type="text" id='Feedback'>反馈内容</input>
+          <button onclick="submitFeedback()">提交</button>
+          <div id="feedbackMessage"></div>
           <p id="visitCount"></p>
       </div>
     </div>
