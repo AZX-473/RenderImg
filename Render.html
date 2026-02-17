@@ -12,11 +12,17 @@
   <body background="https://img.cdn1.vip/i/699167e1bb1f0_1771136993.webp" style="background-size: cover">
     <div style="justify-content:center;display: flex;">
       <div id="image-container">
-          <h1>我要叠甲!</h1>
-          <h1>里面是我自己找的图片,内容不可 不可 不可 不可保证!</h1>
+          <h1>事先叠甲内容不可保证</h1>
           <button onclick="fetchImageFromName()">线路一:不稳定,加载慢,兼容性好</button>
           <button onclick="fetchImageFromUrl()">线路二:稳定,加载快,兼容性差</button>
-          <div style="height: 600px;">
+          <h3>图片分享区:把你的图片放到<a href="https://www.image2url.com/zh/bulk-image-upload">这个网站</a>处理后,把复制的URL填到下面提交</h3>
+
+          <input type="text" id='Feedbackimg'>图片URL</input>
+          <button onclick="submitFeedbackimg()">提交</button>
+          <div id="feedbackMessageimg"></div>
+          <button onclick="fetchuserFeedimg()">来一张别人上传的(我不会去审核，所以大概率会有R18内容，谨慎观看)</button>
+
+          <div style="height: 400px;">
             <input type="text" id='HrefImgName'>输入图片名,直接跳转</input>
             <button onclick="HrefImg()">Okay</button>
           </div>
