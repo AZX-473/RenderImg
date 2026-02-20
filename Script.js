@@ -7,7 +7,14 @@ function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
+  const tips = document.getElementById('tips');
   imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
+  tips.innerHTML = ""
+  try{
+    tips.innerHTML = '${imgs[randomIndex]}'
+  } catch (error){
+    
+  }
 }
 function fetchImageFromUrl(){
   const randomIndex = Math.floor(Math.random() * urls.length);
