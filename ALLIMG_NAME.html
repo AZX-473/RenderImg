@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Render Image</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+  </head>
+
+  <body class="vertical-scroll-container" background="https://img.cdn1.vip/i/699167e1bb1f0_1771136993.webp" style="background-size: cover">
+    <h1 onclick="back()">所有图片(文件),点我返回</h1>
+    <div id="images"></div>
+  </body>
+    <script>
+        var imgs=[]
+        function back(){
+            window.location.href = './Render.html';
+        }
+        function putimgs(){
+            var imgstr=""
+            for(var i=0;i<imgs.length;i++){
+                imgstr+=`<img src="./API/img/${imgs[i]}" alt="image${i+1}"/>`
+            }
+            const tmp = document.getElementById('images');
+            tmp.innerHTML=imgstr
+        }
+        async function loadJsonName(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const jsonData = await response.json();
+                console.log('JSON 数据已加载并解析:', jsonData);
+                for(var i=0;i<jsonData.allname.length;i++){
+                  imgs.push(jsonData.allname[i])
+                }
+            } catch (error) {    
+                console.error('加载或解析 JSON 数据时发生错误:', error);
+            }
+            putimgs()
+        }
+        loadJsonName("./API/file.json")
+    </script>
+</html>

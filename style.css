@@ -17,3 +17,9 @@ input[type=text] {
   border: 2px solid rgb(78, 78, 78);
   border-radius: 4px;
 }
+.vertical-scroll-container {
+  height: 1000px;
+  border: 1px solid #ccc;
+  overflow-y: auto; /* 只关心垂直滚动条 */
+  overflow-x: hidden; /* 隐藏水平滚动条，即使内容溢出 */
+}
