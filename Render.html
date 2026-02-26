@@ -12,12 +12,17 @@
   <body background="https://img.cdn1.vip/i/699167e1bb1f0_1771136993.webp" style="background-size: cover">
     <div style="justify-content:center;display: flex;">
       <div id="image-container">
-          <h1>事先叠甲内容不可保证</h1>
-          <button onclick="fetchImageFromName()">随机图片线路一:不稳定,加载慢,兼容性好</button>
-          <button onclick="fetchImageFromUrl()">随机图片线路二:稳定,加载快,兼容性差</button>
+          <h1>!猎奇警告!</h1>
+          <div>
+            <button onclick="fetchImageFromName()">随机图片线路一:不稳定,加载慢,兼容性好</button>
+            <button onclick="fetchImageFromUrl()">随机图片线路二:稳定,加载快,兼容性差</button>
+            <button onclick="fetchVideoFrombvid()">随机视频(BiliBili)</button>
+          </div>
           <a href="https://azx-473.github.io/AZX_473.github.io/"><img src="./API/AZX.png" style="position: fixed;bottom: 20px;right: 20px;width: 500px;height: 500px;z-index: 999; "></img></a>
-          <button onclick="jumptoallimgname()">所有图片(线路一)</button>
-          <button onclick="jumptoallimgurl()">所有图片(线路二)</button>
+          <div>
+            <button onclick="jumptoallimgname()">所有图片(线路一)</button>
+            <button onclick="jumptoallimgurl()">所有图片(线路二)</button>
+          </div>
           <p id="visitCount"></p>
           <div style="height:600px"></div>
           <div>

@@ -11,6 +11,7 @@
   <body class="vertical-scroll-container" background="https://img.cdn1.vip/i/699167e1bb1f0_1771136993.webp" style="background-size: cover">
     <h1 onclick="back()">所有图片(文件),点我返回</h1>
     <div id="images"></div>
+    <p>Code By AZX</p>
   </body>
     <script>
         var imgs=[]
@@ -20,7 +21,7 @@
         function putimgs(){
             var imgstr=""
             for(var i=0;i<imgs.length;i++){
-                imgstr+=`<img src="./API/img/${imgs[i]}" alt="image${i+1}"/>`
+                imgstr+=`<img src="./API/img/${imgs[i]}" alt="image${i+1}"/ id=>`
             }
             const tmp = document.getElementById('images');
             tmp.innerHTML=imgstr

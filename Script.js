@@ -3,6 +3,7 @@ var isnullurl=true
 var imgs = []
 var urls = []
 var usreimgs = []
+var bvids = []
 function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
@@ -14,6 +15,11 @@ function fetchImageFromUrl(){
   const randomFile = urls[randomIndex];
   const imageContainer = document.getElementById('image-container');
   imageContainer.innerHTML = `<h2>File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${urls.length} (SORT:NULL)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
+}
+function fetchVideoFrombvid(){
+  const randomIndex = Math.floor(Math.random() * bvids.length);
+  const randomFile = "//www.bilibili.com/blackboard/html5mobileplayer.html?autoplay=1&isOutside=true&bvid="+bvids[randomIndex];
+  location.href = randomFile;
 }
 function HrefImg(){
   const tmp = document.getElementById('HrefImgName');
@@ -56,8 +62,25 @@ async function loadJsonName(url) {
     console.error('加载或解析 JSON 数据时发生错误:', error);
   }
 }
+async function loadJsonVideo(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const jsonData = await response.json();
+    console.log('JSON 数据已加载并解析:', jsonData);
+    for(var i=0;i<jsonData.allvideo.length;i++){
+      bvids.push(jsonData.allvideo[i])
+    }
+
+  } catch (error) {    
+    console.error('加载或解析 JSON 数据时发生错误:', error);
+  }
+}
 loadJsonUrl("./API/file.json")
 loadJsonName("./API/file.json")
+loadJsonVideo("./API/file.json")
 if (typeof(Storage) !== "undefined") {
   if (localStorage.pageVisitCount) {
     localStorage.pageVisitCount = Number(localStorage.pageVisitCount) + 1;
