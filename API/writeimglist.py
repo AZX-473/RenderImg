@@ -1,6 +1,6 @@
 import os
 
-img_path = './img/'
+img_path = "img"
 img_list = os.listdir(img_path)
 print('img_list: ', img_list)
 
