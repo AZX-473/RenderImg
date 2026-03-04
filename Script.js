@@ -9,26 +9,29 @@ function fetchImageFromName() {
   const randomFile = apiUrl+imgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
   imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
-  imgs.splice(randomIndex, randomIndex);//随机完就删掉防止重复加载
+  imgs.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(imgs.length===0){
     loadJsonName("./API/file.json")
   }
+}
+function home(){
+  window.location.href = window.location.href;
 }
 function fetchImageFromUrl(){
   const randomIndex = Math.floor(Math.random() * urls.length);
   const randomFile = urls[randomIndex];
   const imageContainer = document.getElementById('image-container');
   imageContainer.innerHTML = `<h2>File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${urls.length} (SORT:NULL)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromUrl()"/>`;
-  urls.splice(randomIndex, randomIndex);//随机完就删掉防止重复加载
+  urls.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(urls.length===0){
     loadJsonUrl("./API/file.json")
   }
 }
 function fetchVideoFrombvid(){
   const randomIndex = Math.floor(Math.random() * bvids.length);
-  const randomFile = "//www.bilibili.com/blackboard/html5mobileplayer.html?autoplay=1&isOutside=true&bvid="+bvids[randomIndex];
-  location.href = randomFile;
-  bvids.splice(randomIndex, randomIndex);//随机完就删掉防止重复加载
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<iframe src="//player.bilibili.com/player.html?bvid=${bvids[randomIndex]}&high_quality=1" allowfullscreen="allowfullscreen" width="1024px" height="576px" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe><h1 onclick="home()">BACK</h1><h1 onclick="fetchVideoFrombvid()">NextVideo</h1>`
+  bvids.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(bvids.length===0){
     loadJsonVideo("./API/file.json")
   }
