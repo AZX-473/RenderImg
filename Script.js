@@ -2,8 +2,38 @@ var apiUrl = './API/img/';
 var isnullurl=true
 var imgs = []
 var urls = []
-var usreimgs = []
+var userimgs = []
 var bvids = []
+async function getImgFiles() {
+  const res = await fetch('/api/getImgFiles');
+  const result = await res.json();
+  if (result.success) {
+    imgs = result.data;
+    console.log('imgs赋值完成：', imgs);
+  } else {
+    console.error('获取img文件失败：', result.message);
+  }
+}
+
+// 改2：获取user文件夹文件（调用新接口）
+async function getUserFiles() {
+  const res = await fetch('/api/getUserFiles');
+  const result = await res.json();
+  if (result.success) {
+    userimgs = result.data;
+    console.log('userimgs赋值完成：', userimgs);
+  } else {
+    console.error('获取user文件失败：', result.message);
+  }
+}
+
+// 改3：串行初始化，确保顺序
+(async () => {
+  await getImgFiles();    // 先拿img
+  await getUserFiles();   // 再拿user
+  console.log('最终 - imgs：', imgs);
+  console.log('最终 - userimgs：', userimgs);
+})();
 function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
@@ -11,7 +41,17 @@ function fetchImageFromName() {
   imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
   imgs.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(imgs.length===0){
-    loadJsonName("./API/file.json")
+    getImgFiles();
+  }
+}
+function fetchUserImageFromName() {
+  const randomIndex = Math.floor(Math.random() * userimgs.length);
+  const randomFile = './API/user/'+userimgs[randomIndex];
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML = `<h2>Image_Name:${userimgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${userimgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchUserImageFromName()"/>`;
+  userimgs.splice(randomIndex, 1);//随机完就删掉防止重复加载
+  if(userimgs.length===0){
+    getUserFiles(false);
   }
 }
 function home(){
@@ -44,7 +84,7 @@ function HrefImg(){
 }
 function AllImg(){
   location.href = "./API/img/";
-}
+}/*
 async function loadJsonUrl(url) {
   try {
     const response = await fetch(url);
@@ -76,7 +116,7 @@ async function loadJsonName(url) {
   } catch (error) {    
     console.error('加载或解析 JSON 数据时发生错误:', error);
   }
-}
+}*/
 async function loadJsonVideo(url) {
   try {
     const response = await fetch(url);
@@ -93,8 +133,9 @@ async function loadJsonVideo(url) {
     console.error('加载或解析 JSON 数据时发生错误:', error);
   }
 }
+/*
 loadJsonUrl("./API/file.json")
-loadJsonName("./API/file.json")
+loadJsonName("./API/file.json")*/
 loadJsonVideo("./API/file.json")
 if (typeof(Storage) !== "undefined") {
   if (localStorage.pageVisitCount) {
@@ -207,6 +248,54 @@ function fetchuserFeedimg(){
 function jumptoallimgname(){
   window.location.href = './ALLIMG_NAME.html';
 }
-function jumptoallimgurl(){
-  window.location.href = './ALLIMG_URL.html';
+function jumptoallimgnameuser(){
+  window.location.href = './ALLIMG_USER.html';
+}
+async function uploadImage() {
+  const fileInput = document.getElementById('uploadFile');
+  const messageEl = document.getElementById('uploadMessage');
+  
+  if (!fileInput.files || fileInput.files.length === 0) {
+    messageEl.textContent = '请先选择要上传的图片！';
+    messageEl.style.color = 'red';
+    return;
+  }
+
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch('http://localhost:5500/api/uploadToUser', { // 写全域名，避免相对路径问题
+      method: 'POST',
+      body: formData,
+      headers: {
+        // 移除Content-Type，让浏览器自动添加（multipart/form-data需要boundary）
+        'Accept': 'application/json'
+      }
+    });
+    
+    const rawText = await response.text();
+    console.log('后端原始返回：', rawText);
+
+    // 兼容返回HTML错误的情况
+    if (rawText.startsWith('<')) {
+      throw new Error('接口访问失败：' + rawText.substring(0, 50));
+    }
+
+    const result = JSON.parse(rawText);
+    if (result.success) {
+      messageEl.textContent = result.message;
+      messageEl.style.color = 'green';
+      await getUserFiles();
+      fileInput.value = '';
+    } else {
+      messageEl.textContent = result.message;
+      messageEl.style.color = 'red';
+    }
+  } catch (error) {
+    console.error('上传错误：', error);
+    messageEl.textContent = `上传失败：${error.message}`;
+    messageEl.style.color = 'red';
+  }
 }

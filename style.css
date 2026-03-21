@@ -9,9 +9,8 @@ html,
 button {
   padding:6px;
   font-size:18px;
-  color:#fff;
-  background-color:#00000080;
-  backdrop-filter :blur(10px);
+  color:#000000;
+  background-color:#ffffff00;
 }
 input[type=text] {
   border: 2px solid rgb(78, 78, 78);

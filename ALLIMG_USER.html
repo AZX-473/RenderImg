@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Render Image</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+  </head>
+
+  <body class="vertical-scroll-container" background="./API/532421.webp" style="background-size: cover">
+    <h1 onclick="back()">所有图片(文件),点我返回</h1>
+    <div id="images"></div>
+    <p>Code By AZX</p>
+  </body>
+    <script>
+        var userimgs=[]
+        function back(){
+            window.location.href = './Render.html';
+        }
+        function putimgs(){
+            var userimgstr=""
+            for(var i=0;i<userimgs.length;i++){
+                userimgstr+=`<img src="./API/user/${userimgs[i]}" alt="image${i+1}"/>`
+            }
+            const tmp = document.getElementById('images');
+            tmp.innerHTML=userimgstr
+        }
+        // 改2：获取user文件夹文件（调用新接口）
+        async function getUserFiles() {
+            const res = await fetch('/api/getUserFiles');
+            const result = await res.json();
+            if (result.success) {
+                userimgs = result.data;
+                console.log('userimgs赋值完成：', userimgs);
+            } else {
+                console.error('获取user文件失败：', result.message);
+            }
+            putimgs();
+        }
+        getUserFiles();
+    </script>
+</html>
