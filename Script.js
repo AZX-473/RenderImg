@@ -266,7 +266,7 @@ async function uploadImage() {
   formData.append('image', file);
 
   try {
-    const response = await fetch('http://localhost:5500/api/uploadToUser', { // 写全域名，避免相对路径问题
+    const response = await fetch('/api/uploadToUser', { // 写全域名，避免相对路径问题
       method: 'POST',
       body: formData,
       headers: {

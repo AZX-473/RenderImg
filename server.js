@@ -5,48 +5,67 @@ const multer = require('multer');
 const app = express();
 const port = 5500;
 
-// 修复跨域：确保OPTIONS请求能正常响应
+// ========== 核心修复：跨域配置（解决Failed to fetch的关键） ==========
+// 1. 替换*为具体前端域名（本地+服务器），支持带凭证
+const ALLOWED_ORIGINS = [
+  'http://localhost:8080', // 本地前端地址（根据你的实际端口调整）
+  'https://azx.frpok.com'
+];
+
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // 动态获取请求来源，只允许白名单内的域名
+  const origin = req.headers.origin;
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGINS[0]); // 兜底用本地
+  }
+  
+  // 补充缺失的CORS头，支持文件上传和凭证传递
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Content-Length');
-  // 处理OPTIONS预检请求
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 允许带凭证（关键）
+  res.setHeader('Access-Control-Max-Age', '3600'); // 预检请求缓存1小时，减少OPTIONS请求
+  
+  // 处理OPTIONS预检请求（返回204而非200，符合规范）
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
+    res.sendStatus(204);
     return;
   }
+  
+  // 设置请求超时（5分钟，避免大文件上传超时）
+  req.setTimeout(300000, () => {
+    res.status(408).json({ success: false, message: '上传超时，请重试' });
+  });
+  
   next();
 });
 
 // 静态文件托管
 app.use(express.static(__dirname));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// 增大请求体限制（适配文件上传）
+app.use(express.json({ limit: '20MB' }));
+app.use(express.urlencoded({ extended: true, limit: '20MB' }));
 
-// 修复multer配置：自定义存储（避免临时文件重命名问题）
+// ========== multer配置（保留你的原有逻辑，仅优化错误处理） ==========
 const storage = multer.diskStorage({
-  // 存储路径
   destination: (req, file, cb) => {
     const userFolder = path.resolve(__dirname, 'API', 'user');
-    // 确保文件夹存在
     if (!fs.existsSync(userFolder)) {
       fs.mkdirSync(userFolder, { recursive: true });
     }
     cb(null, userFolder);
   },
-  // 文件名：保留原文件名，避免重复
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // 文件后缀
-    const name = path.basename(file.originalname, ext); // 文件名（无后缀）
-    // 重复文件命名：name_时间戳.ext（比如 test_1711234567.jpg）
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext);
     const fileName = `${name}_${Date.now()}${ext}`;
     cb(null, fileName);
   }
 });
 
-// 重新配置multer
 const upload = multer({
-  storage: storage, // 使用自定义存储
+  storage: storage,
   fileFilter: (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
     if (allowedTypes.includes(file.mimetype)) {
@@ -58,7 +77,7 @@ const upload = multer({
   limits: { fileSize: 20 * 1024 * 1024 } // 20MB
 });
 
-// 原有接口：getImgFiles
+// ========== 原有接口：保持不变 ==========
 app.get('/api/getImgFiles', (req, res) => {
   const targetFolder = path.resolve(__dirname, 'API', 'img');
   try {
@@ -70,7 +89,6 @@ app.get('/api/getImgFiles', (req, res) => {
   }
 });
 
-// 原有接口：getUserFiles
 app.get('/api/getUserFiles', (req, res) => {
   const targetFolder = path.resolve(__dirname, 'API', 'user');
   try {
@@ -82,29 +100,33 @@ app.get('/api/getUserFiles', (req, res) => {
   }
 });
 
-// 修复上传接口：确保始终返回JSON
+// ========== 上传接口：优化错误状态码 ==========
 app.post('/api/uploadToUser', (req, res) => {
-  // 用try-catch包裹multer，避免报错时返回非JSON
   upload.single('image')(req, res, (err) => {
     try {
-      // 处理multer的错误（文件类型/大小限制）
       if (err) {
-        throw new Error(err.message);
+        // 错误时返回400状态码（而非200），前端更容易识别
+        return res.status(400).json({
+          success: false,
+          message: `上传失败：${err.message}`
+        });
       }
       if (!req.file) {
-        throw new Error('未选择要上传的图片！');
+        return res.status(400).json({
+          success: false,
+          message: '未选择要上传的图片！'
+        });
       }
-      // 成功返回JSON
       res.json({
         success: true,
         message: `图片上传成功：${req.file.originalname}（保存为：${req.file.filename}）`,
         fileName: req.file.filename
       });
     } catch (error) {
-      // 失败也返回JSON（核心修复！）
-      res.status(200).json({
+      // 服务器内部错误返回500
+      res.status(500).json({
         success: false,
-        message: `上传失败：${error.message}`
+        message: `服务器错误：${error.message}`
       });
     }
   });
@@ -124,8 +146,8 @@ function getFileNameListSync(folderPath, isRecursive = false) {
   return fileNameList;
 }
 
-// 启动服务器
-app.listen(port, () => {
-  console.log(`服务器运行：http://localhost:${port}`);
+// ========== 启动服务器：绑定0.0.0.0，允许外部访问 ==========
+app.listen(port, '0.0.0.0', () => {
+  console.log(`服务器运行：http://0.0.0.0:${port}`); // 替换localhost为0.0.0.0，允许服务器外部访问
   console.log(`服务器根目录：${__dirname}`);
 });
