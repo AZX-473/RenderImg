@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>AZXCHAT</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .chat-box {
+      height: 700px;
+      background: rgba(255, 255, 255, 0.199);
+      border-radius: 8px;
+      padding: 15px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .message {
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: #e9f5ff73;
+      border-radius: 6px;
+      max-width: 100%;
+    }
+
+    .message .name {
+      font-weight: bold;
+      color: #0066cc;
+      font-size: 14px;
+    }
+
+    .message .content {
+      margin-top: 4px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #username {
+      width: 120px;
+    }
+
+    #content {
+      flex: 1;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #0052aa;
+    }
+    img {
+        max-height: 500px;
+        max-width: 700px;
+        object-fit: contain; /* 保持图片原比例，填充容器 */
+    }
+  </style>
+</head>
+
+<body background="./API/532421.webp" style="background-size: cover">
+  <div class="chat-box" id="chatBox"></div>
+
+  <div class="input-area">
+    <input type="text" id="username" placeholder="你的名字" value="默认名称">
+    <input type="text" id="content" placeholder="输入消息..." value="请输入文本">
+    <button onclick="sendMsg()">发送</button>
+  </div>
+
+  <script>
+    const API = './api';
+    const chatBox = document.getElementById('chatBox');
+    function last(){
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    
+    // 加载聊天记录
+    async function loadChat() {
+      const res = await fetch(`${API}/getChat`);
+      const data = await res.json();
+      const list = data.data || [];
+
+      chatBox.innerHTML = '';
+
+      list.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.innerHTML = `
+          <div class="name">${msg.username}</div>
+          <div class="content">${msg.content}</div>
+        `;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // 发送消息
+    async function sendMsg() {
+      const username = document.getElementById('username').value.trim();
+      const content = document.getElementById('content').value.trim();
+
+      if (!username || !content) {
+        alert('请输入名字和内容');
+        return;
+      }
+
+      await fetch(`${API}/sendChat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, content })
+      });
+
+      document.getElementById('content').value = '';
+      loadChat();
+    }
+
+    // 回车发送
+    document.getElementById('content').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMsg();
+    });
+
+    // 初始化
+    last();
+    loadChat();
+    //setInterval(loadChat, 3000); // 每3秒自动刷新
+  </script>
+</body>
+</html>

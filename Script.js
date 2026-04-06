@@ -38,7 +38,7 @@ function fetchImageFromName() {
   const randomIndex = Math.floor(Math.random() * imgs.length);
   const randomFile = apiUrl+imgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
+  imageContainer.innerHTML = `<h2>Image_Name:${imgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${imgs.length} (SORT:Unknow)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchImageFromName()"/>`;
   imgs.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(imgs.length===0){
     getImgFiles();
@@ -48,7 +48,7 @@ function fetchUserImageFromName() {
   const randomIndex = Math.floor(Math.random() * userimgs.length);
   const randomFile = './API/user/'+userimgs[randomIndex];
   const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = `<h2>Image_Name:${userimgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${userimgs.length} (SORT:NAME)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchUserImageFromName()"/>`;
+  imageContainer.innerHTML = `<h2>Image_Name:${userimgs[randomIndex]},File_Url:${randomFile}</h2><h2>NUM_AND_SUM:${randomIndex} / ${userimgs.length} (SORT:Unknow)</h2><img src="${randomFile}" alt="Random Image" onclick="fetchUserImageFromName()"/>`;
   userimgs.splice(randomIndex, 1);//随机完就删掉防止重复加载
   if(userimgs.length===0){
     getUserFiles(false);
@@ -84,7 +84,11 @@ function HrefImg(){
 }
 function AllImg(){
   location.href = "./API/img/";
-}/*
+}
+function jumptochat(){
+  location.href = "./chat.html";
+}
+/*
 async function loadJsonUrl(url) {
   try {
     const response = await fetch(url);
