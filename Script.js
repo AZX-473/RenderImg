@@ -4,6 +4,63 @@ var imgs = []
 var urls = []
 var userimgs = []
 var bvids = []
+const API = './api';
+    
+    // 加载聊天记录
+    async function loadChat() {
+      const chatBox = document.getElementById('chatBox');
+      const res = await fetch(`${API}/getChat`);
+      const data = await res.json();
+      const list = data.data || [];
+
+      chatBox.innerHTML = '';
+
+      list.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.innerHTML = `
+          <div class="name">${msg.username}</div>
+          <div class="content">${msg.content}</div>
+        `;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // 发送消息
+    async function sendMsg() {
+      const username = document.getElementById('username').value.trim();
+      const content = document.getElementById('content').value.trim();
+
+      if (!username || !content) {
+        alert('请输入名字和内容');
+        return;
+      }
+
+      await fetch(`${API}/sendChat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, content })
+      });
+
+      document.getElementById('content').value = '';
+      loadChat();
+    }
+
+    // 回车发送
+    document.getElementById('content').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMsg();
+    });
+
+function jumpweb(jnum){
+  for(let i=1;i<=5;i++){
+    const toblack = document.getElementById('jn-'+i);
+    toblack.className = "sidebar-item"
+    if(jnum===i){
+      toblack.className = "sidebar-item active"
+    }
+  }
+}
 async function getImgFiles() {
   const res = await fetch('/api/getImgFiles');
   const result = await res.json();
@@ -76,6 +133,52 @@ function fetchVideoFrombvid(){
     loadJsonVideo("./API/file.json")
   }
 }
+function putimgs(){
+  var imgstr=""
+  for(var i=0;i<imgs.length;i++){
+    imgstr+=`<img src="./API/img/${imgs[i]}" alt="image${i+1}"/ id=>`
+  }
+  const tmp = document.getElementById('image-container');
+  tmp.innerHTML=imgstr
+}
+function putuserimgs(){
+  var imgstr=""
+  for(var i=0;i<userimgs.length;i++){
+    imgstr+=`<img src="./API/user/${userimgs[i]}" alt="image${i+1}"/ id=>`
+  }
+  const tmp = document.getElementById('image-container');
+  tmp.innerHTML=imgstr
+}
+async function loadJsonName(url) {
+  jumpweb(4)
+  try {
+    const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const jsonData = await response.json();
+      console.log('JSON 数据已加载并解析:', jsonData);
+      for(var i=0;i<jsonData.allname.length;i++){
+        imgs.push(jsonData.allname[i])
+      }
+  } catch (error) {    
+    console.error('加载或解析 JSON 数据时发生错误:', error);
+  }
+  putimgs()
+}
+async function getAllUserFiles() {
+  userimgs=[]
+  jumpweb(5)
+  const res = await fetch('/api/getUserFiles');
+  const result = await res.json();
+  if (result.success) {
+    userimgs = result.data;
+    console.log('userimgs赋值完成：', userimgs);
+  } else {
+    console.error('获取user文件失败：', result.message);
+  }
+  putuserimgs();
+}
 function HrefImg(){
   const tmp = document.getElementById('HrefImgName');
   const randomFile = apiUrl+tmp.value;
@@ -86,7 +189,23 @@ function AllImg(){
   location.href = "./API/img/";
 }
 function jumptochat(){
-  location.href = "./chat.html";
+  jumpweb(3);
+  let chatstr=`
+  <div class="chat-box" id="chatBox"></div>
+  <div class="input-area">
+    <input type="text" id="username" placeholder="你的名字" value="默认名称">
+    <input type="text" id="content" placeholder="输入消息..." value="请输入文本">
+    <button onclick="sendMsg()">发送</button>
+  </div>`
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML =  chatstr;
+  loadChat()
+}
+function jumptopush(){
+  jumpweb(2);
+  let pushstr='<div class="card upload-section"><div class="card-title">上传图片</div><p style="color:#9ca3af; margin-bottom:12px;">大小限制：20MB</p><input type="file" id="uploadFile" accept="image/*" style="margin-bottom:12px;"><button class="btn btn-primary" onclick="uploadImage()">上传图片</button><div id="uploadMessage"></div></div>'
+  const imageContainer = document.getElementById('image-container');
+  imageContainer.innerHTML =  pushstr;
 }
 /*
 async function loadJsonUrl(url) {
@@ -303,3 +422,9 @@ async function uploadImage() {
     messageEl.style.color = 'red';
   }
 }
+ function jump_to_new(){
+  var currentURL = window.location.href;
+  if(currentURL.includes("github")){
+    window.location.href = "http://azx.gorsu.ch:59878/Render.html"
+  }
+ }

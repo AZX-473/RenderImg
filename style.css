@@ -3,7 +3,11 @@ html,
         overflow: hidden; 
       }
       img {
-        max-height: 800px;
+        max-width: 700px;
+        object-fit: contain; /* 保持图片原比例，填充容器 */
+      }
+img {
+        max-width: 700px;
         object-fit: contain; /* 保持图片原比例，填充容器 */
       }
 button {
