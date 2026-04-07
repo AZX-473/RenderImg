@@ -157,33 +157,15 @@ function putuserimgs(){
   tmp.innerHTML=imgstr
 }
 async function loadJsonName(url) {
+  imgs=[]
   jumpweb(4)
-  try {
-    const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const jsonData = await response.json();
-      console.log('JSON 数据已加载并解析:', jsonData);
-      for(var i=0;i<jsonData.allname.length;i++){
-        imgs.push(jsonData.allname[i])
-      }
-  } catch (error) {    
-    console.error('加载或解析 JSON 数据时发生错误:', error);
-  }
+  getImgFiles();
   putimgs()
 }
 async function getAllUserFiles() {
   userimgs=[]
   jumpweb(5)
-  const res = await fetch('/api/getUserFiles');
-  const result = await res.json();
-  if (result.success) {
-    userimgs = result.data;
-    console.log('userimgs赋值完成：', userimgs);
-  } else {
-    console.error('获取user文件失败：', result.message);
-  }
+  getUserFiles();
   putuserimgs();
 }
 function HrefImg(){
