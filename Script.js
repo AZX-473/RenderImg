@@ -5,6 +5,13 @@ var urls = []
 var userimgs = []
 var bvids = []
 const API = './api';
+async function jump_to_new(){
+  let str = window.location.href
+  if(str.includes("github")){
+    window.location.href = "http://azx.gorsu.ch:59878/Render.html"
+  }
+ }
+jump_to_new()
     
     // 加载聊天记录
     async function loadChat() {
@@ -422,10 +429,3 @@ async function uploadImage() {
     messageEl.style.color = 'red';
   }
 }
- function jump_to_new(){
-  var currentURL = window.location.href;
-  if(currentURL.includes("github")){
-    window.location.href = "http://azx.gorsu.ch:59878/Render.html"
-  }
- }
-jump_to_new();
