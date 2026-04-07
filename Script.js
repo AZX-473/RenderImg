@@ -157,13 +157,11 @@ function putuserimgs(){
   tmp.innerHTML=imgstr
 }
 async function loadJsonName(url) {
-  imgs=[]
   jumpweb(4)
   getImgFiles();
   putimgs()
 }
 async function getAllUserFiles() {
-  userimgs=[]
   jumpweb(5)
   getUserFiles();
   putuserimgs();
