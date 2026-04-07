@@ -112,7 +112,7 @@ function fetchUserImageFromName() {
   }
 }
 function home(){
-  window.location.href = window.location.href;
+  window.location.href = "http://azx.gorsu.ch:59878/Render.html";
 }
 function fetchImageFromUrl(){
   const randomIndex = Math.floor(Math.random() * urls.length);
