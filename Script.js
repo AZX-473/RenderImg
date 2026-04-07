@@ -428,3 +428,4 @@ async function uploadImage() {
     window.location.href = "http://azx.gorsu.ch:59878/Render.html"
   }
  }
+jump_to_new();
